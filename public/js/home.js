@@ -17,6 +17,19 @@ $(document).ready(function () {
     */
     $('#number').keyup(function () {
         // your code here
+        var num = $('#number').val()
+        $.get('/getCheckNumber', {number: num}, function (result) {
+            if(result.number == num){
+                $("#number").css({"background-color": "red"});
+                $("#error").text("Number already registered")
+                $("#submit").prop('disabled', true)
+            }
+            else{
+                $("#number").css({"background-color": "#E3E3E3"});
+                $("#error").text("")
+                $("#submit").prop('disabled', false)
+            }
+        });
     });
 
     /*
@@ -32,6 +45,22 @@ $(document).ready(function () {
     */
     $('#submit').click(function () {
         // your code here
+        if($("#name").val() != "" && $("#number").val() != "" ){
+            var name = $("#name").val()
+            var number = $("#number").val()
+            $.get('/add', {name: name, number:number}, function(){}); 
+            $("#name").val("")
+            $("#number").val("")
+            $("#contacts").append('<div class="contact">\
+            <img src="/images/icon.webp" class="icon">\
+            <div class="info">\
+                <p class="text">'+ name+'</p>\
+                <p class="text">'+number+ '</p>\
+            </div>\
+            <button class="remove"> X </button>\
+        </div>\
+        ')
+        }
     });
 
     /*
@@ -43,6 +72,11 @@ $(document).ready(function () {
     */
     $('#contacts').on('click', '.remove', function () {
         // your code here
+        var number =  $(this).prev().children().filter(":nth-child(2)").html();
+        $.get('/delete', number, function (result) {
+            
+        });
+        $(this).parent().remove();
     });
 
 })

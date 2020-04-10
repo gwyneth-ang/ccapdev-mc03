@@ -8,6 +8,8 @@ var mongoose = require('mongoose');
 
 var UserSchema = new mongoose.Schema({
     // your code here
+    name:{type:String, trim:true},
+    number: {type:Number, min:0}
 });
 
 module.exports = mongoose.model('User', UserSchema);
